@@ -1,0 +1,6 @@
+{
+  "name": "Growth Sprint 30D",
+  "description": "Construye un sistema de contenido que atraiga clientes usando IA en los próximos 30 días.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
