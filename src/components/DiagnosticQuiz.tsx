@@ -105,6 +105,7 @@ export const DiagnosticQuiz: React.FC = () => {
   const [selectedNiche, setSelectedNiche] = useState<string>("coaches");
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleOptionSelect = (qId: string, option: typeof questions[0]["options"][0]) => {
     setAnswers(prev => ({
@@ -129,13 +130,14 @@ export const DiagnosticQuiz: React.FC = () => {
     return Math.round((scoreSum / totalPossible) * 100);
   };
 
-  const handleSubmitLead = (e: React.FormEvent) => {
+  const handleSubmitLead = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userName.trim() || !userEmail.trim()) {
       setErrorMsg("Por favor, ingresa tu nombre y correo electrónico.");
       return;
     }
     setErrorMsg("");
+    setIsSubmitting(true);
     
     const score = calculateFinalScore();
     const leadData = {
@@ -147,7 +149,37 @@ export const DiagnosticQuiz: React.FC = () => {
       timestamp: new Date().toISOString()
     };
     localStorage.setItem("growth_sprint_lead", JSON.stringify(leadData));
+
+    // Send to Google Sheets Apps Script Web App Google Sheets URL if configured
+    const googleScriptUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    if (googleScriptUrl) {
+      try {
+        const flatData = {
+          timestamp: leadData.timestamp,
+          name: leadData.name,
+          email: leadData.email,
+          phone: leadData.phone,
+          score: leadData.score,
+          q1: leadData.answersSummary[0]?.selectedOption || "",
+          q2: leadData.answersSummary[1]?.selectedOption || "",
+          q3: leadData.answersSummary[2]?.selectedOption || "",
+          q4: leadData.answersSummary[3]?.selectedOption || ""
+        };
+
+        await fetch(googleScriptUrl, {
+          method: "POST",
+          mode: "no-cors", // Crucial for standard Google Web Apps script redirection with no-cors standard configuration
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(flatData)
+        });
+      } catch (err) {
+        console.error("Error sending to Google Apps Script:", err);
+      }
+    }
     
+    setIsSubmitting(false);
     setCurrentStep(5);
   };
 
@@ -397,10 +429,11 @@ export const DiagnosticQuiz: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="w-full md:w-auto py-3.5 px-8 rounded-none font-black text-xs uppercase tracking-widest bg-lime-400 text-zinc-950 hover:bg-white transition-all border border-lime-400 cursor-pointer"
+                      disabled={isSubmitting}
+                      className="w-full md:w-auto py-3.5 px-8 rounded-none font-black text-xs uppercase tracking-widest bg-lime-400 text-zinc-950 hover:bg-white transition-all border border-lime-400 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       id="lead-submit-btn"
                     >
-                      Generar Mi Diagnóstico
+                      {isSubmitting ? "Enviando Reporte..." : "Generar Mi Diagnóstico"}
                       <ChevronRight className="w-4 h-4 text-zinc-950" />
                     </button>
                   </div>
