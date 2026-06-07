@@ -199,7 +199,7 @@ export const DiagnosticQuiz: React.FC = () => {
   const evaluation = getScoreBadge(score);
 
   const whatsappMsg = `¡Hola! Acabo de completar el Diagnóstico Growth para el Sprint de 30 días. Mi puntaje de madurez orgánica es del ${score}%. Hola, me llamo ${userName} y mi negocio es de ${selectedNiche.toUpperCase()}. ¿Me ayudas a revisar mis resultados?`;
-  const whatsappUrl = `https://wa.me/5491122334455?text=${encodeURIComponent(whatsappMsg)}`;
+  const whatsappUrl = `https://wa.me/573217929578?text=${encodeURIComponent(whatsappMsg)}`;
 
   const restartQuiz = () => {
     setAnswers({});

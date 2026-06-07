@@ -126,7 +126,7 @@ export const FAQSection: React.FC = () => {
             </div>
           </div>
           <a
-            href="https://wa.me/5491122334455?text=Hola!%20Tengo%20algunas%2520dudas%2520sobre%2520el%2520Growth%2520Sprint%252030D,%2520me%2520ayudas%2520por%2520favor?"
+            href="https://wa.me/573217929578?text=Hola!%20Tengo%2520algunas%2520dudas%2520sobre%2520el%2520Growth%2520Sprint%252030D,%2520me%2520ayudas%2520por%2520favor?"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full md:w-auto shrink-0 py-3 px-6 rounded-none font-black text-[10px] uppercase tracking-widest bg-lime-400 text-zinc-950 hover:bg-white transition-all border border-lime-400 text-center cursor-pointer"
