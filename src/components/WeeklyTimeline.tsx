@@ -81,14 +81,14 @@ export const WeeklyTimeline: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-lime-400/10 text-lime-400 border border-lime-400/20 mb-4 font-mono text-[10px] tracking-[0.2em] font-bold rounded-none uppercase">
-              30 DÍAS DE EJECUCIÓN INTENSA
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-lime-400 text-zinc-950 border border-lime-400 mb-4 font-mono text-[10px] tracking-[0.25em] font-black rounded-none uppercase">
+              [ 30 DÍAS DE EJECUCIÓN INTENSA ]
             </span>
             <h2 className="text-3xl md:text-5xl font-serif font-light italic text-white tracking-tight mb-6">
-              Qué Incluye el <span className="not-italic font-sans font-black text-lime-400 uppercase">Sprint 30D</span>
+              Cronograma táctico del <span className="not-italic font-sans font-black text-lime-400 uppercase">Sprint 30D</span>
             </h2>
             <p className="text-zinc-400 text-sm">
-              Un acompañamiento práctico de alta intensidad donde edificamos tu motor de ventas de semana a semana. No es teoría, es construcción conjunta garantizada.
+              Un acompañamiento práctico de alta intensidad donde edificamos tu motor de ventas paso a paso. No es teoría, es implementación conjunta real.
             </p>
           </motion.div>
         </div>
@@ -96,7 +96,7 @@ export const WeeklyTimeline: React.FC = () => {
         {/* 4 Weekly Horizontal/Vertical Cards in a highly stylized layout */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
           {/* Connector line between steps on large displays */}
-          <div className="hidden lg:block absolute top-[44px] left-[12%] right-[12%] h-[1px] bg-gradient-to-r from-zinc-800/0 via-zinc-800/80 to-zinc-800/0 z-0" />
+          <div className="hidden lg:block absolute top-[44px] left-[12%] right-[12%] h-[1px] bg-gradient-to-r from-zinc-900/0 via-zinc-900 to-zinc-900/0 z-0" />
           
           {weeklyMilestones.map((milestone, idx) => (
             <motion.div
@@ -105,16 +105,16 @@ export const WeeklyTimeline: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
-              className="bg-zinc-90 w-full border border-zinc-850 bg-zinc-900/10 rounded-none p-6 relative group flex flex-col justify-between hover:border-lime-400/40 transition-all duration-300 z-10"
+              className="bg-zinc-950 border border-zinc-900 rounded-none p-6 relative group flex flex-col justify-between hover:border-lime-400/40 hover:bg-zinc-900/10 transition-all duration-300 z-10"
               id={`milestone-${idx}`}
             >
               <div>
                 {/* Week & Icon header */}
                 <div className="flex items-center justify-between mb-6">
-                  <span className="text-[10px] font-mono font-bold px-3 py-1 bg-zinc-900 text-lime-400 rounded-none border border-zinc-850">
-                    {milestone.week}
+                  <span className="text-[10px] font-mono font-black px-3 py-1 bg-zinc-900 text-lime-400 rounded-none border border-zinc-800">
+                    // {milestone.week.toUpperCase()}
                   </span>
-                  <div className="w-9 h-9 rounded-none bg-zinc-950/60 border border-zinc-800 flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-none bg-zinc-900 border border-zinc-800 flex items-center justify-center">
                     {getWeekIcon(idx)}
                   </div>
                 </div>
@@ -123,22 +123,22 @@ export const WeeklyTimeline: React.FC = () => {
                   <span className="text-[9px] font-mono tracking-widest text-lime-400 font-bold uppercase block">
                     {milestone.badge}
                   </span>
-                  <h4 className="text-sm font-bold uppercase text-white mt-1 tracking-wider leading-snug">
+                  <h4 className="text-base font-black uppercase text-white mt-1 tracking-wider leading-snug font-mono text-lime-400">
                     {milestone.title}
                   </h4>
                 </div>
 
-                <p className="text-zinc-400 text-xs leading-relaxed mb-6 text-left">
+                <p className="text-zinc-200 text-sm leading-relaxed mb-6 text-left">
                   {milestone.description}
                 </p>
               </div>
 
               {/* Items checklist styled with clean minimalist vectors */}
-              <div className="mt-4 pt-4 border-t border-zinc-850 space-y-3 text-left">
+              <div className="mt-4 pt-4 border-t border-zinc-900 space-y-3 text-left">
                 {milestone.items.map((item, itemIdx) => (
                   <div key={itemIdx} className="flex items-start gap-2">
-                    <span className="text-lime-400 font-mono text-[11px] shrink-0 font-bold">—</span>
-                    <span className="text-[11px] text-zinc-300 leading-normal">
+                    <span className="text-lime-400 font-mono text-xs shrink-0 font-bold">—</span>
+                    <span className="text-xs md:text-sm text-zinc-200 leading-normal font-mono uppercase tracking-wide">
                       {item}
                     </span>
                   </div>

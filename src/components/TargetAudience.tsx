@@ -96,11 +96,11 @@ export const TargetAudience: React.FC = () => {
                   {getAudienceIcon(persona.iconName)}
                 </div>
                 
-                <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-2 group-hover:text-lime-400 transition-colors">
+                <h4 className="text-base font-black uppercase tracking-widest text-white mb-2 group-hover:text-lime-400 transition-colors font-mono">
                   {persona.role}
                 </h4>
                 
-                <p className="text-zinc-400 text-xs leading-relaxed">
+                <p className="text-zinc-300 text-sm leading-relaxed">
                   {persona.description}
                 </p>
               </div>

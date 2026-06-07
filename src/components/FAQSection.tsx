@@ -83,9 +83,9 @@ export const FAQSection: React.FC = () => {
               >
                 <button
                   onClick={() => toggleFAQ(idx)}
-                  className="w-full text-left p-6 flex justify-between items-center gap-4 text-white font-bold tracking-wide focus:outline-none cursor-pointer"
+                  className="w-full text-left p-6 flex justify-between items-center gap-4 text-white font-black tracking-wide focus:outline-none cursor-pointer group"
                 >
-                  <span className="text-xs uppercase pr-2 tracking-wide group-hover:text-lime-400 transition-colors">
+                  <span className="text-sm uppercase pr-2 tracking-wide group-hover:text-lime-400 transition-colors">
                     {faq.question}
                   </span>
                   <div className={`w-6 h-6 rounded-none bg-zinc-950/80 border border-zinc-800 flex items-center justify-center shrink-0 text-lime-400 transition-transform duration-300 ${isOpen ? "rotate-180 bg-lime-400 text-zinc-950 border-lime-400" : ""}`}>
@@ -102,7 +102,7 @@ export const FAQSection: React.FC = () => {
                       transition={{ duration: 0.25, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 pt-1 text-zinc-400 text-xs leading-relaxed border-t border-zinc-850 font-serif font-light italic">
+                      <div className="px-6 pb-6 pt-2.5 text-zinc-200 text-sm md:text-base leading-relaxed border-t border-zinc-850 font-serif font-normal italic">
                         {faq.answer}
                       </div>
                     </motion.div>

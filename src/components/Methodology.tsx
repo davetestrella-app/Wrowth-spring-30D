@@ -123,12 +123,12 @@ export const Methodology: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <span className={`text-[13px] font-bold uppercase transition-colors tracking-wider ${isActive ? "text-white" : "text-zinc-300"}`}>
+                      <span className={`text-sm md:text-base font-black uppercase transition-colors tracking-wider ${isActive ? "text-lime-400" : "text-zinc-200"}`}>
                         {step.title}
                       </span>
                       <ChevronRight className={`w-4 h-4 text-lime-400 transition-transform duration-300 ${isActive ? "translate-x-1" : "opacity-0"}`} />
                     </div>
-                    <span className="text-xs text-lime-400/80 mt-0.5 block font-serif italic font-light">
+                    <span className="text-xs md:text-sm text-lime-300/90 mt-0.5 block font-serif italic font-normal">
                       {step.shortDescription}
                     </span>
                   </div>
@@ -167,7 +167,7 @@ export const Methodology: React.FC = () => {
                     {growthSteps[activeIndex].title}
                   </h4>
                   
-                  <p className="text-zinc-350 text-sm md:text-base leading-relaxed mb-8">
+                  <p className="text-zinc-200 text-base md:text-lg leading-relaxed mb-8">
                     {growthSteps[activeIndex].longDescription}
                   </p>
                 </div>

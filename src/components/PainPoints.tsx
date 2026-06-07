@@ -71,15 +71,15 @@ export const PainPoints: React.FC<PainPointsProps> = ({ onCtaClick }) => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-lime-400/10 text-lime-400 border border-lime-400/20 mb-4 font-mono text-[10px] uppercase tracking-widest font-bold rounded-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
-              DIAGNÓSTICO DE SITUACIÓN
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-400/10 text-red-400 border border-red-400/20 mb-4 font-mono text-[10px] uppercase tracking-widest font-black rounded-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+              [ EXAMEN DE REALIDAD ]
             </span>
-            <h2 className="text-3xl md:text-5xl font-serif font-light italic text-zinc-105 tracking-tight mb-6">
-              ¿Te identificas con alguna de estas situaciones?
+            <h2 className="text-3xl md:text-5xl font-serif font-light italic text-white tracking-tight mb-6">
+              ¿Te identificas con alguno de estos <span className="not-italic font-sans font-black text-lime-400">síntomas</span>?
             </h2>
             <p className="text-zinc-400 text-sm md:text-base leading-relaxed">
-              La mayoría de los emprendedores comete el error de publicar sin estrategia. Esto no es falta de talento, es falta de un <strong className="text-lime-400 font-bold uppercase tracking-wider">sistema de contenido automatizado</strong>.
+              La mayoría de los emprendedores comete el error de publicar sin entender la psicología de compra. No es falta de talento, es falta de un <strong className="text-lime-400 font-black uppercase tracking-wider font-mono">// SISTEMA DE CONTENIDO PERSUASIVO //</strong>.
             </p>
           </motion.div>
         </div>
@@ -93,19 +93,21 @@ export const PainPoints: React.FC<PainPointsProps> = ({ onCtaClick }) => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="group p-8 rounded-none bg-zinc-900/20 border border-zinc-850 hover:border-lime-400/40 transition-all duration-300 relative overflow-hidden"
+              className="group p-8 rounded-none bg-zinc-900/10 border border-zinc-900 hover:border-lime-400/40 hover:bg-zinc-900/30 transition-all duration-300 relative overflow-hidden"
               id={`pain-card-${point.id}`}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-lime-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute top-3 right-4 font-mono text-[10px] font-black text-zinc-800 group-hover:text-lime-400/30 transition-colors">
+                // 0{index + 1} /
+              </div>
               
               <div className="relative z-10">
                 <div className="w-10 h-10 rounded-none bg-zinc-950/60 border border-zinc-800 flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
                   {getIcon(point.iconName)}
                 </div>
-                <h3 className="text-sm font-bold uppercase text-white mb-2 tracking-wide group-hover:text-lime-400 transition-colors">
+                <h3 className="text-sm font-black uppercase text-white mb-2 tracking-widest group-hover:text-lime-400 transition-colors font-mono">
                   {point.text}
                 </h3>
-                <p className="text-zinc-400 text-xs leading-relaxed">
+                <p className="text-zinc-300 text-sm leading-relaxed">
                   {point.description}
                 </p>
               </div>
@@ -124,10 +126,10 @@ export const PainPoints: React.FC<PainPointsProps> = ({ onCtaClick }) => {
             
             <div>
               <span className="text-4xl font-mono font-black text-lime-400 tracking-tighter">82%</span>
-              <p className="text-white font-bold uppercase tracking-wider mt-3 font-display text-xs mb-2">
+              <p className="text-white font-black uppercase tracking-wider mt-3 font-display text-sm mb-2">
                 Del contenido de servicios falla en convertir.
               </p>
-              <p className="text-xs text-zinc-400 leading-relaxed md:max-w-md">
+              <p className="text-sm text-zinc-300 leading-relaxed md:max-w-md">
                 Sin un embudo estructurado, los posts se pierden rápidamente en el feed sin generar llamadas de venta. No sigas regalando tu tiempo de forma ineficiente.
               </p>
             </div>

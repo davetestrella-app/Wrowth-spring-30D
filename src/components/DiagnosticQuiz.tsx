@@ -151,7 +151,7 @@ export const DiagnosticQuiz: React.FC = () => {
     localStorage.setItem("growth_sprint_lead", JSON.stringify(leadData));
 
     // Send to Google Sheets Apps Script Web App Google Sheets URL if configured
-    const googleScriptUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    const googleScriptUrl = (import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL;
     if (googleScriptUrl) {
       try {
         const flatData = {
@@ -223,7 +223,7 @@ export const DiagnosticQuiz: React.FC = () => {
           <h2 className="text-3xl md:text-5xl font-serif font-light italic text-white mb-4">
             Diagnóstico Growth Gratuito
           </h2>
-          <p className="text-zinc-450 max-w-xl mx-auto text-xs md:text-sm">
+          <p className="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
             Evalúa tu nivel de tracción de contenido actual y descubre exactamente qué cuello de botella está reteniendo el crecimiento de tu servicio profesional.
           </p>
         </div>
@@ -260,7 +260,7 @@ export const DiagnosticQuiz: React.FC = () => {
                   Descubre tu Score de Crecimiento Orgánico
                 </h3>
                 
-                <p className="text-zinc-400 text-xs md:text-sm leading-relaxed max-w-lg mb-8">
+                <p className="text-zinc-300 text-sm md:text-base leading-relaxed max-w-lg mb-8">
                   Responde 4 preguntas objetivas sobre tu modelo comercial y proceso de redes. Al finalizar, obtendrás una hoja de ruta conceptual personalizada más una plantilla inteligente de Inteligencia Artificial lista para copiar.
                 </p>
 
@@ -311,9 +311,9 @@ export const DiagnosticQuiz: React.FC = () => {
                         <button
                           key={idx}
                           onClick={() => handleOptionSelect(questions[currentStep].id, option)}
-                          className={`w-full text-left p-4.5 rounded-none border transition-all duration-200 text-xs flex items-center justify-between gap-4 ${
+                          className={`w-full text-left p-5 rounded-none border transition-all duration-200 text-sm flex items-center justify-between gap-4 ${
                             isSelected
-                              ? "bg-zinc-800/40 border-lime-400 text-white"
+                              ? "bg-zinc-800/40 border-lime-400 text-white font-medium"
                               : "bg-zinc-950/20 border-zinc-850 hover:border-lime-400/40 text-zinc-300 hover:text-white"
                           }`}
                           id={`q-${currentStep}-opt-${idx}`}
@@ -360,7 +360,7 @@ export const DiagnosticQuiz: React.FC = () => {
                   <h3 className="text-2xl font-serif font-light italic text-white mb-2">
                     ¡Respuestas Registradas con Éxito!
                   </h3>
-                  <p className="text-zinc-400 text-xs max-w-lg leading-relaxed">
+                  <p className="text-zinc-200 text-sm max-w-lg leading-relaxed">
                     Para consolidar tu reporte estratégico de conversión y desbloquear tu score real personalizado, ingresa tus detalles de contacto a continuación.
                   </p>
                 </div>
@@ -493,7 +493,7 @@ export const DiagnosticQuiz: React.FC = () => {
                     <h4 className="text-xl md:text-2xl font-serif font-light italic text-white line-clamp-2">
                       ¡Hola, {userName}! Este es tu reporte estratégico simplificado
                     </h4>
-                    <p className="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                    <p className="text-zinc-300 text-sm md:text-base leading-relaxed">
                       {evaluation.desc}
                     </p>
                   </div>
@@ -506,14 +506,14 @@ export const DiagnosticQuiz: React.FC = () => {
                   </h5>
                   <div className="grid md:grid-cols-2 gap-4">
                     {(Object.entries(answers) as [string, { score: number; text: string; feedback: string }][]).map(([qId, ans], idx) => (
-                      <div key={qId} className="p-3 bg-zinc-900/30 border border-zinc-850/50 rounded-none space-y-1 text-xs">
-                        <span className="block font-bold uppercase tracking-wide text-zinc-300 text-[10px]">
+                      <div key={qId} className="p-4 bg-zinc-900/30 border border-zinc-850/50 rounded-none space-y-1.5 text-sm">
+                        <span className="block font-black uppercase tracking-wide text-white text-xs font-mono">
                           Fase {idx + 1}: {idx === 0 ? "Goal & Ideas" : idx === 1 ? "Consistencia" : idx === 2 ? "Oferta comercial" : "Conversión"}
                         </span>
-                        <p className="text-zinc-500 line-clamp-1 italic text-[11px] font-serif font-light">
+                        <p className="text-zinc-400 line-clamp-1 italic text-xs font-serif font-light">
                           Seleccionaste: "{ans.text}"
                         </p>
-                        <p className="text-lime-400 font-mono text-[11px] font-bold mt-1 leading-snug">
+                        <p className="text-lime-400 font-mono text-xs md:text-sm font-bold mt-1 leading-snug">
                           ✓ {ans.feedback}
                         </p>
                       </div>
@@ -531,7 +531,7 @@ export const DiagnosticQuiz: React.FC = () => {
                         <Sparkles className="w-4 h-4 text-lime-400 shrink-0" />
                         Cosecha Tu Primer Regalo: Prompt Inteligente de IA y Ventas
                       </h5>
-                      <p className="text-[11px] text-zinc-400 mt-1">
+                      <p className="text-xs md:text-sm text-zinc-300 mt-1">
                         Selecciona tu rubro y copia este prompt de entrenamiento de estilo listo para usar.
                       </p>
                     </div>
@@ -550,7 +550,7 @@ export const DiagnosticQuiz: React.FC = () => {
                     </select>
                   </div>
 
-                  <div className="bg-zinc-900/90 border border-zinc-850 rounded-none p-4 font-mono text-[11px] text-zinc-300 leading-relaxed relative max-h-[160px] overflow-y-auto whitespace-pre-wrap select-all">
+                  <div className="bg-zinc-900/90 border border-zinc-850 rounded-none p-5 font-mono text-xs md:text-sm text-zinc-200 leading-relaxed relative max-h-[180px] overflow-y-auto whitespace-pre-wrap select-all">
                     {nichePrompts[selectedNiche].prompt}
                   </div>
 
@@ -570,7 +570,7 @@ export const DiagnosticQuiz: React.FC = () => {
                   <h4 className="text-lg md:text-xl font-serif font-light italic text-white max-w-md">
                     ¿Quieres que auditemos tus respuestas en vivo y estructuremos tu sistema de 30 días gratis?
                   </h4>
-                  <p className="text-zinc-400 text-xs max-w-lg leading-relaxed">
+                  <p className="text-zinc-300 text-sm md:text-base leading-relaxed max-w-lg">
                     Antes de abrir vacantes oficiales para la siguiente edición de <strong className="text-lime-400 font-bold">Growth Sprint 30D</strong>, revisamos gratis tu score para garantizar que tu nicho es altamente rentable.
                   </p>
 
