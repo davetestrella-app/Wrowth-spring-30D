@@ -319,7 +319,7 @@ export default function App() {
           </div>
 
           <p className="text-zinc-500 text-xs text-center md:text-left font-mono">
-            © {new Date().getFullYear()} Growth Sprint 30D. Todos los derechos reservados. Construido con Inteligencia Artificial.
+            © {new Date().getFullYear()} Growth Sprint 30D. Todos los derechos reservados. Construido con amor en content creativo.
           </p>
 
           <div className="flex items-center gap-4 text-[10px] font-mono text-zinc-500">
