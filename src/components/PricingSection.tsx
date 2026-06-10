@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { CheckCircle, ShieldCheck, Sparkles, CreditCard, Lock, ArrowRight } from "lucide-react";
+import bundleMockupBoxes from "../assets/images/bundle_mockup_es_1781057724806.png";
 
 interface PricingSectionProps {
   hotmartUrl?: string;
@@ -37,6 +38,39 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
           <p className="text-zinc-300 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-light">
             Inscríbete ahora en <strong className="text-white font-bold">Growth Sprint 30D</strong> a través de nuestra plataforma segura de Hotmart y desbloquea el sistema definitivo para atraer clientes con Inteligencia Artificial.
           </p>
+        </div>
+
+        {/* Dynamic 3D Bundle Mockup Cajas showcases */}
+        <div className="mb-14 border border-zinc-800 bg-zinc-950/40 p-4 md:p-6 relative overflow-hidden rounded-xl shadow-2xl">
+          <div className="absolute top-2 left-4 flex gap-1 z-20">
+            <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+            <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+            <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+          </div>
+          <span className="absolute top-2 right-4 font-mono text-[8px] text-lime-450 tracking-wider">
+            // PROGRAM_BUNDLE_PREVIEW
+          </span>
+          <div className="text-center pt-4 pb-3">
+            <h3 className="text-xs md:text-sm font-mono text-zinc-400 uppercase tracking-[0.25em] font-black mb-1">
+              ESTO ES EXACTAMENTE LO QUE RECIBIRÁS AL ENTRAR:
+            </h3>
+            <span className="text-[10px] font-mono text-lime-400">[ PACK DIGITAL RETINA READY ]</span>
+          </div>
+          <div className="relative aspect-[16/9] w-full rounded-lg overflow-hidden border border-zinc-850 bg-zinc-950 mt-2">
+            <img 
+              src={bundleMockupBoxes} 
+              alt="Caja y Bundle Tridimensional de Growth Sprint 30D"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+            />
+            {/* Overlay description chips representing 'Las Cajas' in high-tech brutalist style */}
+            <div className="absolute top-4 left-4 bg-zinc-950/70 backdrop-blur border border-zinc-800 px-3 py-1.5 font-mono text-[9px] text-white">
+              [ 📦 PROGRAMA COMPLETO CON IA ]
+            </div>
+            <div className="absolute bottom-4 right-4 bg-zinc-950/70 backdrop-blur border border-zinc-850 px-3 py-1.5 font-mono text-[9px] text-lime-405">
+              [ ⚡ ACCESO COMPLETO DE POR VIDA ]
+            </div>
+          </div>
         </div>
 
         {/* Brutalist Hotmart Pricing Card */}
