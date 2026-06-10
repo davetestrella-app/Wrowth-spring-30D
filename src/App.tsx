@@ -22,7 +22,12 @@ import { Methodology } from "./components/Methodology";
 import { WeeklyTimeline } from "./components/WeeklyTimeline";
 import { TargetAudience } from "./components/TargetAudience";
 import { DiagnosticQuiz } from "./components/DiagnosticQuiz";
+import { PricingSection } from "./components/PricingSection";
 import { FAQSection } from "./components/FAQSection";
+
+// Generated high-energy visual assets for superior dopaminic styling
+import viralPhoneMockup from "./assets/images/viral_phone_mockup_1781054319522.png";
+import vaultGridDashboard from "./assets/images/vault_grid_dashboard_1781054333803.png";
 
 export default function App() {
   const scrollToDiagnostic = () => {
@@ -59,7 +64,7 @@ export default function App() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 md:py-32 overflow-hidden bg-zinc-950 border-b border-zinc-800">
+      <section className="relative pt-20 pb-24 lg:py-32 overflow-hidden bg-zinc-950 border-b border-zinc-800">
         {/* Ambient background subtle vector glows */}
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-zinc-900/10 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-lime-950/5 rounded-full blur-[120px] pointer-events-none" />
@@ -67,64 +72,123 @@ export default function App() {
         {/* Subtle decorative grid overlay matching premium visual style */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#a3e63503_1px,transparent_1px),linear-gradient(to_bottom,#a3e63503_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
-        <div className="relative max-w-6xl mx-auto px-6 z-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-lime-400 text-zinc-950 border border-lime-400 mb-6 font-mono text-[10px] tracking-[0.25em] uppercase font-black">
-              <Sparkles className="w-3.5 h-3.5 text-zinc-950 animate-pulse" />
-              [ SISTEMA DE CONTENIDO CON IA ]
-            </span>
+        <div className="relative max-w-6xl mx-auto px-6 z-10">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            {/* Left Column: Text Stack */}
+            <div className="lg:col-span-7 text-center lg:text-left space-y-6">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-lime-400 text-zinc-950 border border-lime-400 font-mono text-[10px] tracking-[0.25em] uppercase font-black">
+                <Sparkles className="w-3.5 h-3.5 text-zinc-950 animate-pulse" />
+                [ SISTEMA DE CONTENIDO CON IA ]
+              </span>
 
-            <h1 className="text-5xl md:text-[8rem] font-black tracking-tighter text-white mb-6 leading-[0.85] uppercase max-w-5xl mx-auto font-display">
-              Growth <span className="text-lime-400 block md:inline font-mono">//</span> <span className="underline decoration-lime-400 decoration-8 underline-offset-4">Sprint</span> 30D
-            </h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-[4.5rem] xl:text-[5.2rem] font-black tracking-tighter text-white leading-[0.85] uppercase font-display">
+                Growth <span className="text-lime-400 font-mono">//</span> <br />
+                <span className="underline decoration-lime-400 decoration-8 underline-offset-4">Sprint</span> 30D
+              </h1>
 
-            <h1 className="text-xl md:text-3xl font-serif italic text-white tracking-tight max-w-3xl mx-auto mb-6">
-              "Construye un sistema de contenido que <span className="bg-lime-400/10 text-lime-400 px-1.5 py-0.5 border border-lime-400/20 not-italic font-sans font-bold">atraiga clientes</span> usando IA en los próximos 30 días"
-            </h1>
+              <h2 className="text-xl md:text-2xl font-serif italic text-white tracking-tight leading-relaxed">
+                "Construye un sistema de contenido que <span className="bg-lime-400/10 text-lime-400 px-2 py-0.5 border border-lime-400/20 not-italic font-sans font-black">atraiga clientes</span> usando IA en los próximos 30 días"
+              </h2>
 
-            <p className="text-zinc-300 text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-10 uppercase tracking-wider font-mono font-medium">
-              // Si eres emprendedor de servicios y estás harto de no saber qué publicar, de perder horas creando contenido o de no generar oportunidades de negocio calificados... estás a un diagnóstico de cambiar las reglas del juego.
-            </p>
+              <p className="text-zinc-300 text-xs md:text-sm leading-relaxed max-w-2xl mx-auto lg:mx-0 uppercase tracking-wider font-mono font-medium">
+                // Si eres emprendedor de servicios y estás harto de no saber qué publicar, de perder horas creando contenido o de no generar oportunidades de negocio calificados... estás a un diagnóstico de cambiar las reglas del juego.
+              </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button
-                onClick={scrollToDiagnostic}
-                className="w-full sm:w-auto py-5 px-10 rounded-none font-black bg-lime-400 text-zinc-950 hover:bg-white hover:text-zinc-950 transition-all uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-2 border-2 border-lime-400 active:scale-95"
-                id="hero-cta-btn"
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center pt-2">
+                <button
+                  onClick={scrollToDiagnostic}
+                  className="w-full sm:w-auto py-5 px-10 rounded-none font-black bg-lime-400 text-zinc-950 hover:bg-white hover:text-zinc-950 transition-all uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-2 border-2 border-lime-400 active:scale-95 cursor-pointer"
+                  id="hero-cta-btn"
+                >
+                  Quiero mi Diagnóstico Growth
+                  <ArrowRight className="w-4 h-4 text-zinc-950 animate-bounce-horizontal" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column: Floating Dopamine smartphone mockup & metrics */}
+            <div className="lg:col-span-5 flex justify-center items-center relative">
+              {/* Backglow element */}
+              <div className="absolute w-72 h-72 bg-lime-400/10 rounded-full blur-[80px]" />
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative bg-zinc-900/15 border border-zinc-800 p-4 max-w-[290px] md:max-w-[320px] shadow-2xl overflow-hidden group rounded-xl"
               >
-                Quiero mi Diagnóstico Growth
-                <ArrowRight className="w-4 h-4 text-zinc-950" />
-              </button>
-            </div>
+                {/* Decorative border bar */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-lime-400 via-emerald-400 to-lime-300" />
+                
+                {/* Visual watermark */}
+                <span className="absolute top-2 left-3 font-mono text-[8px] text-zinc-650 tracking-widest uppercase">// LIVE CAMPAIGN</span>
+                <span className="absolute top-2 right-3 font-mono text-[8px] text-lime-400 animate-pulse tracking-widest uppercase">● ACTIVE TRAC</span>
 
-            {/* Quick trust metrics banner matching the reference image's visual density with brutalist indexes */}
-            <div className="mt-16 pt-12 border-t border-zinc-900 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left">
-              <div className="p-5 border border-zinc-800 bg-zinc-900/10 relative group">
-                <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-zinc-700">// 01</span>
-                <span className="block text-lg font-mono font-black text-white uppercase tracking-wider">4 Semanas</span>
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono">De Acompañamiento</span>
-              </div>
-              <div className="p-5 border border-zinc-800 bg-zinc-900/10 relative group border-t-2 border-t-lime-400">
-                <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-lime-400/50">// 02</span>
-                <span className="block text-lg font-mono font-black text-lime-400 uppercase tracking-wider">100% Real</span>
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-black">Casos Prácticos</span>
-              </div>
-              <div className="p-5 border border-zinc-800 bg-zinc-900/10 relative group">
-                <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-zinc-700">// 03</span>
-                <span className="block text-lg font-mono font-black text-white uppercase tracking-wider">IA Copiloto</span>
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-black">Flujos Probados</span>
-              </div>
-              <div className="p-5 border border-zinc-800 bg-zinc-900/10 relative group border-t-2 border-t-lime-400">
-                <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-lime-400/50">// 04</span>
-                <span className="block text-lg font-mono font-black text-lime-400 uppercase tracking-wider">Limitados</span>
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono">Edición Exclusiva</span>
-              </div>
+                {/* Main Mockup Image with required referrerPolicy */}
+                <div className="mt-4 overflow-hidden border border-zinc-800 bg-zinc-950 aspect-[9/16] relative">
+                  <img 
+                    src={viralPhoneMockup} 
+                    alt="Viral Content Mobile Interface Blueprint" 
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]"
+                  />
+
+                  {/* Dopamine overlays integrated directly */}
+                  <div className="absolute bottom-4 left-4 right-4 bg-zinc-950/80 backdrop-blur-md border border-zinc-800 p-2.5 font-mono text-[9px] uppercase space-y-1">
+                    <div className="flex justify-between items-center text-white font-bold">
+                      <span>CLIENT ACQUISITION:</span>
+                      <span className="text-lime-400">+312%</span>
+                    </div>
+                    <div className="w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+                      <div className="bg-lime-400 h-full w-[84%] animate-pulse" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Floating dopamine badges to boost interaction */}
+              <motion.div 
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-4 -right-2 bg-zinc-900 border border-zinc-800 py-2 px-3 flex items-center gap-2 shadow-xl"
+              >
+                <div className="w-2 h-2 rounded-full bg-lime-400 animate-ping" />
+                <span className="font-mono text-[9px] text-white font-black tracking-widest uppercase">🚀 ALTA CONVERSIÓN</span>
+              </motion.div>
+
+              <motion.div 
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -bottom-2 -left-6 bg-zinc-950 border border-zinc-850 py-2 px-3 shadow-xl"
+              >
+                <span className="font-mono text-[9px] text-lime-400 font-black tracking-widest uppercase">🔥 +50k REPRODUCCIONES</span>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Quick trust metrics banner matching the reference image's visual density with brutalist indexes */}
+          <div className="mt-20 pt-12 border-t border-zinc-900 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto text-left">
+            <div className="p-5 border border-zinc-850 bg-zinc-900/10 relative group">
+              <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-zinc-700">// 01</span>
+              <span className="block text-lg font-mono font-black text-white uppercase tracking-wider">4 Semanas</span>
+              <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono">De Acompañamiento</span>
+            </div>
+            <div className="p-5 border border-zinc-850 bg-zinc-900/10 relative group border-t-2 border-t-lime-400">
+              <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-lime-400/50">// 02</span>
+              <span className="block text-lg font-mono font-black text-lime-400 uppercase tracking-wider">100% Real</span>
+              <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-black">Casos Prácticos</span>
+            </div>
+            <div className="p-5 border border-zinc-850 bg-zinc-900/10 relative group">
+              <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-zinc-700">// 03</span>
+              <span className="block text-lg font-mono font-black text-white uppercase tracking-wider">IA Copiloto</span>
+              <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-black">Flujos Probados</span>
+            </div>
+            <div className="p-5 border border-zinc-850 bg-zinc-900/10 relative group border-t-2 border-t-lime-400">
+              <span className="absolute top-2 right-3 text-[9px] font-mono font-bold text-lime-400/50">// 04</span>
+              <span className="block text-lg font-mono font-black text-lime-400 uppercase tracking-wider">Limitados</span>
+              <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono">Edición Exclusiva</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -227,6 +291,61 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          {/* Visual Showcase: The Prompt Database Vault */}
+          <div className="mt-20 pt-16 border-t border-zinc-900 grid lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-5 space-y-5 text-left">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-lime-400/10 text-lime-400 border border-lime-400/20 font-mono text-[9px] tracking-widest uppercase font-bold">
+                // MATRIZ INTELIGENTE DE CONTENIDOS
+              </span>
+              <h3 className="text-2xl md:text-3.5xl font-serif font-light italic text-white leading-tight">
+                El Copiloto Definitivo para tus Redes
+              </h3>
+              <p className="text-zinc-350 text-sm md:text-base leading-relaxed font-light">
+                No empieces de una página en blanco. Accede instantáneamente a nuestra suite automatizada de prompts, ganchos de alta retención de 3 segundos y matrices lógicas diseñadas para convertir visualizaciones frías en clientes leales.
+              </p>
+              
+              <div className="space-y-2.5 pt-2 font-mono text-xs text-zinc-350">
+                <div className="flex items-center gap-2">
+                  <span className="text-lime-450">✔</span>
+                  <span>90 Ganchos validados para Reels/TikTok</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-lime-450">✔</span>
+                  <span>Estructuras de guión de 45 segundos</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-lime-450">✔</span>
+                  <span>Planificador de contenido infinito</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="lg:col-span-7 bg-zinc-900/10 border border-zinc-850 p-4 relative group rounded-xl overflow-hidden shadow-2xl">
+              <div className="absolute top-2 left-4 flex gap-1 z-20">
+                <div className="w-1.5 h-1.5 rounded-full bg-zinc-750" />
+                <div className="w-1.5 h-1.5 rounded-full bg-zinc-750" />
+                <div className="w-1.5 h-1.5 rounded-full bg-zinc-750" />
+              </div>
+              <span className="absolute top-1.5 text-center left-0 right-0 font-mono text-[8.5px] text-zinc-600 uppercase tracking-widest pointer-events-none select-none">
+                vault_dashboard_preview.sys
+              </span>
+
+              <div className="mt-4 border border-zinc-850 overflow-hidden relative rounded bg-zinc-950 shadow-inner">
+                <img 
+                  src={vaultGridDashboard} 
+                  alt="Suite automatizada de prompts y aceleradores de contenido de Growth Sprint 30D" 
+                  referrerPolicy="no-referrer"
+                  className="w-full h-auto object-cover opacity-85 group-hover:opacity-100 group-hover:scale-[1.015] transition-all duration-[1s]"
+                />
+                
+                {/* Micro badge indicator */}
+                <div className="absolute top-4 right-4 bg-lime-400 text-zinc-950 font-mono text-[9px] font-black px-2 py-0.5 uppercase tracking-wider">
+                  PRE-CARGADO CON IA
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -302,6 +421,9 @@ export default function App() {
 
       {/* Interactive Diagnosis Section Component */}
       <DiagnosticQuiz />
+
+      {/* Pricing and Hotmart Purchase Section */}
+      <PricingSection />
 
       {/* FAQ Section Component */}
       <FAQSection />

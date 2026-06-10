@@ -565,36 +565,51 @@ export const DiagnosticQuiz: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Final Call To Action block */}
+               {/* Final Call To Action block */}
                 <div className="pt-6 border-t border-zinc-850 flex flex-col items-center text-center space-y-4">
-                  <h4 className="text-lg md:text-xl font-serif font-light italic text-white max-w-md">
-                    ¿Quieres que auditemos tus respuestas en vivo y estructuremos tu sistema de 30 días gratis?
+                  <h4 className="text-xl md:text-2xl font-serif font-light italic text-white max-w-xl">
+                    ¿Quieres acelerar tu conversión hoy y construir tu sistema de contenido en 30 días?
                   </h4>
-                  <p className="text-zinc-300 text-sm md:text-base leading-relaxed max-w-lg">
-                    Antes de abrir vacantes oficiales para la siguiente edición de <strong className="text-lime-400 font-bold">Growth Sprint 30D</strong>, revisamos gratis tu score para garantizar que tu nicho es altamente rentable.
+                  <p className="text-zinc-300 text-sm md:text-base leading-relaxed max-w-2xl">
+                    Tienes dos caminos: Inscríbete directamente al <strong className="text-lime-400 font-bold">Growth Sprint 30D</strong> en Hotmart con acceso de por vida a las plantillas y la comunidad, o solicita primero una auditoría gratis 1-a-1 de tus respuestas a nuestro WhatsApp.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+                  <div className="flex flex-col sm:flex-row gap-3 w-full justify-center pt-2">
+                    <a
+                      href={(import.meta as any).env?.VITE_HOTMART_URL || "https://pay.hotmart.com/YOUR_PRODUCT_ID"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-4 px-8 rounded-none font-black text-xs uppercase tracking-widest bg-lime-400 text-zinc-950 hover:bg-white transition-all border border-lime-400 flex items-center justify-center gap-2 shadow-md cursor-pointer group"
+                      id="hotmart-cta-analytics"
+                    >
+                      <span>Inscribirme en Hotmart</span>
+                      <ChevronRight className="w-4 h-4 text-zinc-950 group-hover:translate-x-1 transition-transform" />
+                    </a>
+
                     <a
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="py-3.5 px-8 rounded-none font-black text-xs uppercase tracking-widest bg-lime-400 text-zinc-950 hover:bg-white transition-all border border-lime-400 flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                      className="py-4 px-8 rounded-none font-black text-xs uppercase tracking-widest bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-lime-450 flex items-center justify-center gap-2 cursor-pointer"
                       id="wa-cta-analytics"
                     >
-                      <PhoneCall className="w-4 h-4 text-zinc-950" />
+                      <PhoneCall className="w-4 h-4 text-lime-400" />
                       Agendar Auditoría Gratis
                     </a>
 
                     <button
                       onClick={restartQuiz}
-                      className="py-3.5 px-6 rounded-none font-bold uppercase tracking-widest bg-zinc-90 w-full border border-zinc-800 bg-zinc-900/50 text-[10px] text-lime-400 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      className="py-4 px-6 rounded-none font-bold uppercase tracking-widest bg-zinc-90 border border-zinc-800 bg-zinc-900/50 text-[10px] text-zinc-400 hover:text-white flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       id="restart-quiz-btn"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
-                      Repetir Diagnóstico
+                      Reiniciar
                     </button>
                   </div>
+                  
+                  <span className="text-[10px] text-zinc-550 font-mono block text-center uppercase tracking-wider pt-2">
+                    ✓ Pago 100% Seguro por Hotmart • Garantía de Devolución de 7 Días
+                  </span>
                 </div>
               </motion.div>
             )}
