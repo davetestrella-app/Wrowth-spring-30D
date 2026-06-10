@@ -7,7 +7,7 @@ interface PricingSectionProps {
 }
 
 export const PricingSection: React.FC<PricingSectionProps> = ({ 
-  hotmartUrl = (import.meta as any).env?.VITE_HOTMART_URL || "https://pay.hotmart.com/YOUR_PRODUCT_ID"
+  hotmartUrl = (import.meta as any).env?.VITE_HOTMART_URL || "https://pay.hotmart.com/I106243223W?checkoutMode=10"
 }) => {
   const features = [
     "4 Semanas de acompañamiento intensivo paso a paso",
@@ -95,7 +95,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
               href={hotmartUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-4 px-6 rounded-none font-black text-xs uppercase tracking-[0.25em] bg-lime-400 text-zinc-950 hover:bg-white transition-all border border-lime-400 flex items-center justify-center gap-2 group cursor-pointer active:scale-95"
+              className="w-full py-4 px-6 rounded-none font-black text-xs uppercase tracking-[0.25em] bg-lime-400 text-zinc-950 border border-lime-400 flex items-center justify-center gap-2 group cursor-pointer hotmart-glow-btn"
               id="hotmart-pricing-cta"
             >
               Comprar en Hotmart

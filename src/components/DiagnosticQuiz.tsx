@@ -576,10 +576,10 @@ export const DiagnosticQuiz: React.FC = () => {
 
                   <div className="flex flex-col sm:flex-row gap-3 w-full justify-center pt-2">
                     <a
-                      href={(import.meta as any).env?.VITE_HOTMART_URL || "https://pay.hotmart.com/YOUR_PRODUCT_ID"}
+                      href={(import.meta as any).env?.VITE_HOTMART_URL || "https://pay.hotmart.com/I106243223W?checkoutMode=10"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="py-4 px-8 rounded-none font-black text-xs uppercase tracking-widest bg-lime-400 text-zinc-950 hover:bg-white transition-all border border-lime-400 flex items-center justify-center gap-2 shadow-md cursor-pointer group"
+                      className="py-4 px-8 rounded-none font-black text-xs uppercase tracking-widest bg-lime-400 text-zinc-950 border border-lime-400 flex items-center justify-center gap-2 shadow-md cursor-pointer group hotmart-glow-btn"
                       id="hotmart-cta-analytics"
                     >
                       <span>Inscribirme en Hotmart</span>
