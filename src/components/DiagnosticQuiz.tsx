@@ -108,6 +108,10 @@ export const DiagnosticQuiz: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
   const [copiedLeadsToast, setCopiedLeadsToast] = useState<boolean>(false);
+  const [localScriptUrl, setLocalScriptUrl] = useState<string>(() => {
+    return localStorage.getItem("local_google_script_url") || "";
+  });
+  const [testStatus, setTestStatus] = useState<{ status: "idle" | "loading" | "success" | "error"; msg?: string }>({ status: "idle" });
   const [leadsList, setLeadsList] = useState<any[]>(() => {
     try {
       const saved = localStorage.getItem("growth_sprint_leads_list");
@@ -173,8 +177,9 @@ export const DiagnosticQuiz: React.FC = () => {
     localStorage.setItem("growth_sprint_leads_list", JSON.stringify(updatedLeads));
     setLeadsList(updatedLeads);
 
-    // Send to Google Sheets Apps Script Web App Google Sheets URL if configured
-    const googleScriptUrl = (import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL;
+    // Read URL with priority (LocalStorage override, fallback to Vite Env variable)
+    const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL || "";
+    const googleScriptUrl = localScriptUrl.trim() || envUrl.trim();
     
     console.log("📊 [Diagnóstico] Preparando envío de datos de prospecto:", leadData);
     
@@ -247,8 +252,8 @@ export const DiagnosticQuiz: React.FC = () => {
         console.error("❌ [Diagnóstico] Error enviando a Google Apps Script:", err);
       }
     } else {
-      console.warn("⚠️ [Diagnóstico] No se detectó ninguna URL en VITE_GOOGLE_SCRIPT_URL. Los datos se guardaron localmente en localStorage pero NO se enviaron a tu Google Sheets.");
-      console.info("💡 Consejo: Asegúrate de configurar la variable de entorno 'VITE_GOOGLE_SCRIPT_URL' en el archivo .env o en la pestaña Settings del panel superior.");
+      console.warn("⚠️ [Diagnóstico] No se detectó ninguna URL en VITE_GOOGLE_SCRIPT_URL o Local Storage. Los datos se guardaron localmente en localStorage pero NO se enviaron a tu Google Sheets.");
+      console.info("💡 Consejo: Abre el Panel de Control inferior para pegar tu URL de Google Apps Script o configurar la variable VITE_GOOGLE_SCRIPT_URL.");
     }
     
     setIsSubmitting(false);
@@ -322,6 +327,116 @@ export const DiagnosticQuiz: React.FC = () => {
     if (window.confirm("¿Seguro que deseas eliminar todos los leads de prueba locales? Esta acción no se puede deshacer.")) {
       localStorage.removeItem("growth_sprint_leads_list");
       setLeadsList([]);
+    }
+  };
+
+  const handleSaveLocalUrl = (url: string) => {
+    const trimmed = url.trim();
+    localStorage.setItem("local_google_script_url", trimmed);
+    setLocalScriptUrl(trimmed);
+  };
+
+  const sendTestLead = async () => {
+    const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL || "";
+    const activeUrl = localScriptUrl.trim() || envUrl.trim();
+    
+    if (!activeUrl) {
+      setTestStatus({ 
+        status: "error", 
+        msg: "Por favor, ingresa o configura una URL de Google Apps Script primero en el recuadro." 
+      });
+      return;
+    }
+    
+    setTestStatus({ status: "loading", msg: "Enviando registro de prueba..." });
+    
+    const mockLead = {
+      timestamp: new Date().toISOString(),
+      name: "Prueba de Integración (Fila Manual)",
+      email: "prueba_conexion@creadores.ia",
+      phone: "+573009999999",
+      score: 85,
+      answersSummary: [
+        { qId: "q1", selectedOption: "[Prueba] Red de contenidos masiva", score: 25 },
+        { qId: "q2", selectedOption: "[Prueba] Publicación esporádica", score: 15 },
+        { qId: "q3", selectedOption: "[Prueba] Flujo de venta sin imán", score: 20 },
+        { qId: "q4", selectedOption: "[Prueba] IA Generativa básica", score: 25 }
+      ]
+    };
+
+    try {
+      const flatData: Record<string, any> = {
+        timestamp: mockLead.timestamp,
+        name: mockLead.name,
+        email: mockLead.email,
+        phone: mockLead.phone,
+        score: mockLead.score,
+        q1: mockLead.answersSummary[0].selectedOption,
+        q2: mockLead.answersSummary[1].selectedOption,
+        q3: mockLead.answersSummary[2].selectedOption,
+        q4: mockLead.answersSummary[3].selectedOption,
+        
+        fecha: mockLead.timestamp,
+        nombre: mockLead.name,
+        correo: mockLead.email,
+        telefono: mockLead.phone,
+        celular: mockLead.phone,
+        puntaje: mockLead.score,
+        pregunta1: mockLead.answersSummary[0].selectedOption,
+        pregunta2: mockLead.answersSummary[1].selectedOption,
+        pregunta3: mockLead.answersSummary[2].selectedOption,
+        pregunta4: mockLead.answersSummary[3].selectedOption,
+
+        Timestamp: mockLead.timestamp,
+        Nombre: mockLead.name,
+        Email: mockLead.email,
+        Correo: mockLead.email,
+        Teléfono: mockLead.phone,
+        Telefono: mockLead.phone,
+        Celular: mockLead.phone,
+        Puntaje: mockLead.score,
+        Pregunta1: mockLead.answersSummary[0].selectedOption,
+        Pregunta2: mockLead.answersSummary[1].selectedOption,
+        Pregunta3: mockLead.answersSummary[2].selectedOption,
+        Pregunta4: mockLead.answersSummary[3].selectedOption
+      };
+
+      const params = new URLSearchParams();
+      Object.entries(flatData).forEach(([key, val]) => {
+        params.append(key, String(val));
+      });
+
+      const targetUrl = activeUrl.includes("?") 
+        ? `${activeUrl}&${params.toString()}`
+        : `${activeUrl}?${params.toString()}`;
+
+      // POST to Apps Script with no-cors
+      await fetch(targetUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(flatData)
+      });
+
+      setTestStatus({ 
+        status: "success", 
+        msg: "¡Fila de prueba enviada! Revisa tu Google Sheet. Puede tardar un par de segundos. Si no se registra, revisa que el Script esté Guardado, Autorizado y Publicado como Aplicación Web para 'Cualquiera'." 
+      });
+      
+      // Also add to local history list
+      const current = [...leadsList];
+      const updated = [mockLead, ...current];
+      localStorage.setItem("growth_sprint_leads_list", JSON.stringify(updated));
+      setLeadsList(updated);
+      
+    } catch (err: any) {
+      console.error(err);
+      setTestStatus({ 
+        status: "error", 
+        msg: `Fallo de conexión: ${err.message || String(err)}`
+      });
     }
   };
 
@@ -800,27 +915,92 @@ export const DiagnosticQuiz: React.FC = () => {
                 </div>
               </div>
 
-              {/* Status variable debugger */}
-              <div className="grid md:grid-cols-2 gap-4 mb-6">
-                <div className="p-3 bg-zinc-900/40 border border-zinc-850/45 text-xs font-mono">
-                  <span className="text-zinc-500 block uppercase font-bold text-[9px] mb-1">Estado de la Integración (VITE_GOOGLE_SCRIPT_URL):</span>
-                  { (import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL ? (
-                    <div className="text-lime-400 break-all select-all flex items-start gap-1">
-                      <span className="text-lime-400 shrink-0">● CONFIGURADO:</span> <span className="break-all">{(import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL}</span>
+              {/* Status variable debugger / Direct URL config & validation */}
+              <div className="grid md:grid-cols-12 gap-6 mb-6">
+                <div className="md:col-span-12 lg:col-span-7 p-4 bg-zinc-900/60 border border-zinc-850 text-xs font-mono space-y-4">
+                  <div>
+                    <span className="text-zinc-400 block uppercase font-bold text-[10px] mb-1.5 tracking-wider">
+                      🔗 Dirección Web (URL) de tu Script de Google Sheets:
+                    </span>
+                    
+                    <div className="flex flex-col sm:flex-row gap-2 mt-1">
+                      <input 
+                        type="text"
+                        defaultValue={localScriptUrl}
+                        onChange={(e) => handleSaveLocalUrl(e.target.value)}
+                        placeholder="Pega la URL de tu Web App de Apps Script..."
+                        className="flex-1 bg-zinc-950 border border-zinc-800 text-white text-xs px-3 py-2 outline-none focus:border-lime-400 font-mono"
+                        id="local-script-url-input"
+                      />
+                      <button
+                        onClick={() => {
+                          const val = (document.getElementById("local-script-url-input") as HTMLInputElement)?.value || "";
+                          handleSaveLocalUrl(val);
+                          alert("URL de script guardada localmente en tu navegador. ¡Ya puedes hacer pruebas de envío!");
+                        }}
+                        className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-bold transition-colors cursor-pointer uppercase tracking-wider text-[10px]"
+                      >
+                        Vincular URL
+                      </button>
                     </div>
-                  ) : (
-                    <div className="text-amber-500 leading-relaxed text-[11px]">
-                      ⚠️ NO DETECTADO: El formulario guarda todo en la memoria de este navegador. Puedes copiar los registros de prueba abajo.
-                    </div>
-                  )}
+
+                    <p className="text-[10px] text-zinc-500 mt-2 leading-relaxed">
+                      {localScriptUrl ? (
+                        <span className="text-lime-400 font-medium">
+                          ● VINCULADO LOCALMENTE: Los envíos se harán a esta URL vinculada en tu navegador.
+                        </span>
+                      ) : (import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL ? (
+                        <span className="text-zinc-400">
+                          ● CONFIGURADO EN VARIABLES: Detectado default <strong className="text-lime-450">{(import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL.substring(0, 45)}...</strong>
+                        </span>
+                      ) : (
+                        <span className="text-amber-500/90">
+                          ⚠️ SIN CONFIGURACIÓN: El formulario guarda todo temporalmente en la caché de este navegador. ¡Pega tu URL arriba para conectarlo hoy!
+                        </span>
+                      )}
+                    </p>
+                  </div>
                 </div>
-                <div className="p-3 bg-zinc-900/40 border border-zinc-850/45 text-[10px] text-zinc-400 font-mono leading-relaxed">
-                  <span className="text-lime-400 font-bold block uppercase text-[9px] mb-1">💡 ¿Cómo pegar la tabla copiada?</span>
-                  1. Completa el diagnóstico para generar datos.<br />
-                  2. Haz clic en "Copiar Tabla para Google Sheets".<br />
-                  3. Abre tu Google Sheet, haz clic en la Celda A1 y presiona <kbd className="px-1 py-0.5 bg-zinc-800 text-white rounded">Ctrl + V</kbd> (o Cmd + V). Las columnas se separarán solas automáticamente.
+
+                <div className="md:col-span-12 lg:col-span-5 p-4 bg-zinc-900/60 border border-zinc-850 text-xs font-mono flex flex-col justify-between">
+                  <div>
+                    <span className="text-zinc-400 block uppercase font-bold text-[10px] mb-1.5 tracking-wider">
+                      ⚡ Prueba de Envío Express:
+                    </span>
+                    <p className="text-[10px] text-zinc-500 mb-3 leading-relaxed">
+                      Envía una fila de prueba ("Juan Pérez") instantáneamente para verificar tu conexión a Google Sheets sin tener que llenar el quiz.
+                    </p>
+                  </div>
+
+                  <div>
+                    <button
+                      onClick={sendTestLead}
+                      disabled={testStatus.status === "loading"}
+                      className="w-full py-2 bg-gradient-to-r from-lime-400 to-emerald-400 text-zinc-950 font-bold uppercase tracking-wider text-[10px] hover:brightness-110 disabled:opacity-40 transition-all cursor-pointer shadow-sm"
+                    >
+                      {testStatus.status === "loading" ? "Enviando Señal..." : "Enviar Registro de Prueba a Google Sheets"}
+                    </button>
+                  </div>
                 </div>
               </div>
+
+              {/* Live execution feedback box */}
+              {testStatus.status !== "idle" && (
+                <div className={`mb-6 p-3.5 border font-mono text-xs ${
+                  testStatus.status === "loading" 
+                    ? "bg-zinc-900/80 border-lime-450/40 text-lime-400 animate-pulse" 
+                    : testStatus.status === "success"
+                    ? "bg-lime-950/20 border-lime-505/30 text-lime-400"
+                    : "bg-red-950/20 border-red-900/30 text-red-400"
+                }`}>
+                  <strong className="block uppercase text-[9px] tracking-widest font-extrabold mb-1">
+                    {testStatus.status === "loading" && "⏳ PROCESANDO ENVÍO..."}
+                    {testStatus.status === "success" && "🎉 SEÑAL ENVIADA CON EXITO"}
+                    {testStatus.status === "error" && "❌ ERROR EN LA OPERACIÓN"}
+                  </strong>
+                  <p className="leading-relaxed text-[11px]">{testStatus.msg}</p>
+                </div>
+              )}
 
               {/* Flex tabs or main interface split */}
               <div className="grid md:grid-cols-12 gap-6">
