@@ -154,7 +154,9 @@ export const DiagnosticQuiz: React.FC = () => {
     const googleScriptUrl = (import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL;
     if (googleScriptUrl) {
       try {
-        const flatData = {
+        // Broad compatibility dictionary with English, Spanish, lowercase and capitalized keys
+        const flatData: Record<string, any> = {
+          // English keys
           timestamp: leadData.timestamp,
           name: leadData.name,
           email: leadData.email,
@@ -163,12 +165,50 @@ export const DiagnosticQuiz: React.FC = () => {
           q1: leadData.answersSummary[0]?.selectedOption || "",
           q2: leadData.answersSummary[1]?.selectedOption || "",
           q3: leadData.answersSummary[2]?.selectedOption || "",
-          q4: leadData.answersSummary[3]?.selectedOption || ""
+          q4: leadData.answersSummary[3]?.selectedOption || "",
+          
+          // Spanish keys
+          fecha: leadData.timestamp,
+          nombre: leadData.name,
+          correo: leadData.email,
+          telefono: leadData.phone,
+          celular: leadData.phone,
+          puntaje: leadData.score,
+          pregunta1: leadData.answersSummary[0]?.selectedOption || "",
+          pregunta2: leadData.answersSummary[1]?.selectedOption || "",
+          pregunta3: leadData.answersSummary[2]?.selectedOption || "",
+          pregunta4: leadData.answersSummary[3]?.selectedOption || "",
+
+          // Capitalized variations for direct matches
+          Timestamp: leadData.timestamp,
+          Nombre: leadData.name,
+          Email: leadData.email,
+          Correo: leadData.email,
+          Teléfono: leadData.phone,
+          Telefono: leadData.phone,
+          Celular: leadData.phone,
+          Puntaje: leadData.score,
+          Pregunta1: leadData.answersSummary[0]?.selectedOption || "",
+          Pregunta2: leadData.answersSummary[1]?.selectedOption || "",
+          Pregunta3: leadData.answersSummary[2]?.selectedOption || "",
+          Pregunta4: leadData.answersSummary[3]?.selectedOption || ""
         };
 
-        await fetch(googleScriptUrl, {
+        // Construct search parameters. This dynamically populates e.parameter for standard doPost/doGet hooks!
+        const params = new URLSearchParams();
+        Object.entries(flatData).forEach(([key, val]) => {
+          params.append(key, String(val));
+        });
+
+        // Safe query string formatting
+        const targetUrl = googleScriptUrl.includes("?") 
+          ? `${googleScriptUrl}&${params.toString()}`
+          : `${googleScriptUrl}?${params.toString()}`;
+
+        // Send payload via robust POST featuring URL-encoded params + JSON backup
+        await fetch(targetUrl, {
           method: "POST",
-          mode: "no-cors", // Crucial for standard Google Web Apps script redirection with no-cors standard configuration
+          mode: "no-cors", 
           headers: {
             "Content-Type": "text/plain;charset=utf-8"
           },
