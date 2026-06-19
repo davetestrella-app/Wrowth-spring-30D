@@ -106,6 +106,16 @@ export const DiagnosticQuiz: React.FC = () => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
+  const [copiedLeadsToast, setCopiedLeadsToast] = useState<boolean>(false);
+  const [leadsList, setLeadsList] = useState<any[]>(() => {
+    try {
+      const saved = localStorage.getItem("growth_sprint_leads_list");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const handleOptionSelect = (qId: string, option: typeof questions[0]["options"][0]) => {
     setAnswers(prev => ({
@@ -149,10 +159,27 @@ export const DiagnosticQuiz: React.FC = () => {
       timestamp: new Date().toISOString()
     };
     localStorage.setItem("growth_sprint_lead", JSON.stringify(leadData));
+    
+    // Save to the running list of leads for local database visualizer backup
+    let currentLeads: any[] = [];
+    try {
+      const saved = localStorage.getItem("growth_sprint_leads_list");
+      currentLeads = saved ? JSON.parse(saved) : [];
+      if (!Array.isArray(currentLeads)) currentLeads = [];
+    } catch {
+      currentLeads = [];
+    }
+    const updatedLeads = [leadData, ...currentLeads];
+    localStorage.setItem("growth_sprint_leads_list", JSON.stringify(updatedLeads));
+    setLeadsList(updatedLeads);
 
     // Send to Google Sheets Apps Script Web App Google Sheets URL if configured
     const googleScriptUrl = (import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL;
+    
+    console.log("📊 [Diagnóstico] Preparando envío de datos de prospecto:", leadData);
+    
     if (googleScriptUrl) {
+      console.log(`🌐 [Diagnóstico] Intentando enviar datos a la URL de Google Apps Script: ${googleScriptUrl}`);
       try {
         // Broad compatibility dictionary with English, Spanish, lowercase and capitalized keys
         const flatData: Record<string, any> = {
@@ -214,9 +241,14 @@ export const DiagnosticQuiz: React.FC = () => {
           },
           body: JSON.stringify(flatData)
         });
+        
+        console.log("✅ [Diagnóstico] Envío completado con éxito con modo 'no-cors'. Los datos ya deberían estar siendo procesados por tu Google Apps Script.");
       } catch (err) {
-        console.error("Error sending to Google Apps Script:", err);
+        console.error("❌ [Diagnóstico] Error enviando a Google Apps Script:", err);
       }
+    } else {
+      console.warn("⚠️ [Diagnóstico] No se detectó ninguna URL en VITE_GOOGLE_SCRIPT_URL. Los datos se guardaron localmente en localStorage pero NO se enviaron a tu Google Sheets.");
+      console.info("💡 Consejo: Asegúrate de configurar la variable de entorno 'VITE_GOOGLE_SCRIPT_URL' en el archivo .env o en la pestaña Settings del panel superior.");
     }
     
     setIsSubmitting(false);
@@ -240,6 +272,58 @@ export const DiagnosticQuiz: React.FC = () => {
 
   const whatsappMsg = `¡Hola! Acabo de completar el Diagnóstico Growth para el Sprint de 30 días. Mi puntaje de madurez orgánica es del ${score}%. Hola, me llamo ${userName} y mi negocio es de ${selectedNiche.toUpperCase()}. ¿Me ayudas a revisar mis resultados?`;
   const whatsappUrl = `https://wa.me/573217929578?text=${encodeURIComponent(whatsappMsg)}`;
+
+  const copyLeadsToClipboard = () => {
+    if (leadsList.length === 0) return;
+    const headers = ["Fecha/Hora (UTC)", "Nombre", "Email", "WhatsApp / Tel", "Puntaje %", "Pregunta 1", "Pregunta 2", "Pregunta 3", "Pregunta 4"];
+    const rows = leadsList.map(lead => [
+      lead.timestamp,
+      lead.name,
+      lead.email,
+      lead.phone || "No especificado",
+      `${lead.score}%`,
+      lead.answersSummary[0]?.selectedOption || "",
+      lead.answersSummary[1]?.selectedOption || "",
+      lead.answersSummary[2]?.selectedOption || "",
+      lead.answersSummary[3]?.selectedOption || ""
+    ]);
+    const tsv = [headers.join("\t"), ...rows.map(r => r.join("\t"))].join("\n");
+    navigator.clipboard.writeText(tsv);
+    setCopiedLeadsToast(true);
+    setTimeout(() => setCopiedLeadsToast(false), 3000);
+  };
+
+  const downloadLeadsCSV = () => {
+    if (leadsList.length === 0) return;
+    const headers = ["Fecha", "Nombre", "Email", "WhatsApp", "Puntaje", "Pregunta1", "Pregunta2", "Pregunta3", "Pregunta4"];
+    const csvRows = [headers.join(",")];
+    leadsList.forEach(lead => {
+      csvRows.push([
+        `"${lead.timestamp}"`,
+        `"${lead.name.replace(/"/g, '""')}"`,
+        `"${lead.email.replace(/"/g, '""')}"`,
+        `"${(lead.phone || '').replace(/"/g, '""')}"`,
+        `"${lead.score}%"`,
+        `"${(lead.answersSummary[0]?.selectedOption || '').replace(/"/g, '""')}"`,
+        `"${(lead.answersSummary[1]?.selectedOption || '').replace(/"/g, '""')}"`,
+        `"${(lead.answersSummary[2]?.selectedOption || '').replace(/"/g, '""')}"`,
+        `"${(lead.answersSummary[3]?.selectedOption || '').replace(/"/g, '""')}"`
+      ].join(","));
+    });
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "reporte_leads_growth_sprint.csv");
+    link.click();
+  };
+
+  const clearLeadsHistory = () => {
+    if (window.confirm("¿Seguro que deseas eliminar todos los leads de prueba locales? Esta acción no se puede deshacer.")) {
+      localStorage.removeItem("growth_sprint_leads_list");
+      setLeadsList([]);
+    }
+  };
 
   const restartQuiz = () => {
     setAnswers({});
@@ -655,6 +739,171 @@ export const DiagnosticQuiz: React.FC = () => {
             )}
           </AnimatePresence>
         </div>
+
+        {/* Acceso Administrador / Control de Leads (Local Backup) */}
+        <div className="mt-8 text-center relative z-20">
+          <button 
+            onClick={() => setShowAdminPanel(!showAdminPanel)}
+            className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-550 hover:text-lime-400 hover:border-lime-500/30 uppercase tracking-widest transition-all py-2.5 px-4 border border-zinc-900/60 bg-zinc-950/40 hover:bg-zinc-950 cursor-pointer"
+            id="toggle-admin-panel"
+          >
+            <span>{showAdminPanel ? "[ OCULTAR PANEL DE CONTROL ]" : "[ REVISAR DATOS & GUÍA DE GOOGLE SHEETS ]"}</span>
+          </button>
+        </div>
+
+        {/* Admin panel animation container */}
+        <AnimatePresence>
+          {showAdminPanel && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="mt-6 p-6 md:p-8 bg-zinc-950 border border-zinc-850 rounded-none text-left relative overflow-hidden"
+              id="leads-admin-panel"
+            >
+              <div className="absolute top-0 right-0 w-48 h-48 bg-lime-400/5 rounded-full blur-[50px] pointer-events-none" />
+              
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-zinc-850 mb-6">
+                <div>
+                  <h3 className="text-sm font-mono text-white font-heavy uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
+                    Consola de Diagnóstico & Leads Locales
+                  </h3>
+                  <p className="text-zinc-500 font-mono text-[9px] mt-0.5">
+                    // COPIA DE SEGURIDAD LOCAL FRENTE A ERRORES DE HOJA DE CÁLCULO
+                  </p>
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={copyLeadsToClipboard}
+                    disabled={leadsList.length === 0}
+                    className="py-1.5 px-3 rounded-none bg-lime-400 text-zinc-950 text-[9px] font-mono font-bold uppercase tracking-wider hover:bg-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    {copiedLeadsToast ? "¡Copiado!" : "Copiar Tabla para Google Sheets"}
+                  </button>
+                  <button
+                    onClick={downloadLeadsCSV}
+                    disabled={leadsList.length === 0}
+                    className="py-1.5 px-3 rounded-none bg-zinc-900 border border-zinc-800 hover:bg-zinc-850 text-lime-400 text-[9px] font-mono font-bold uppercase tracking-wider transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    Descargar CSV
+                  </button>
+                  <button
+                    onClick={clearLeadsHistory}
+                    disabled={leadsList.length === 0}
+                    className="py-1.5 px-3 rounded-none bg-zinc-900/30 border border-red-950/40 hover:border-red-900/40 text-red-405 text-[9px] font-mono font-bold uppercase tracking-wider transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    Limpiar Leads
+                  </button>
+                </div>
+              </div>
+
+              {/* Status variable debugger */}
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                <div className="p-3 bg-zinc-900/40 border border-zinc-850/45 text-xs font-mono">
+                  <span className="text-zinc-500 block uppercase font-bold text-[9px] mb-1">Estado de la Integración (VITE_GOOGLE_SCRIPT_URL):</span>
+                  { (import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL ? (
+                    <div className="text-lime-400 break-all select-all flex items-start gap-1">
+                      <span className="text-lime-400 shrink-0">● CONFIGURADO:</span> <span className="break-all">{(import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL}</span>
+                    </div>
+                  ) : (
+                    <div className="text-amber-500 leading-relaxed text-[11px]">
+                      ⚠️ NO DETECTADO: El formulario guarda todo en la memoria de este navegador. Puedes copiar los registros de prueba abajo.
+                    </div>
+                  )}
+                </div>
+                <div className="p-3 bg-zinc-900/40 border border-zinc-850/45 text-[10px] text-zinc-400 font-mono leading-relaxed">
+                  <span className="text-lime-400 font-bold block uppercase text-[9px] mb-1">💡 ¿Cómo pegar la tabla copiada?</span>
+                  1. Completa el diagnóstico para generar datos.<br />
+                  2. Haz clic en "Copiar Tabla para Google Sheets".<br />
+                  3. Abre tu Google Sheet, haz clic en la Celda A1 y presiona <kbd className="px-1 py-0.5 bg-zinc-800 text-white rounded">Ctrl + V</kbd> (o Cmd + V). Las columnas se separarán solas automáticamente.
+                </div>
+              </div>
+
+              {/* Flex tabs or main interface split */}
+              <div className="grid md:grid-cols-12 gap-6">
+                {/* Left Side: Recorded leads table */}
+                <div className="md:col-span-6 space-y-3">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block font-bold">
+                    Lista de Leads en Caché Local ({leadsList.length})
+                  </span>
+                  
+                  <div className="border border-zinc-850 bg-zinc-900/40 w-full max-h-[220px] overflow-y-auto font-mono text-[10px]">
+                    {leadsList.length === 0 ? (
+                      <div className="p-8 text-center text-zinc-600 italic">
+                        No hay leads registrados en este navegador todavía.<br />
+                        Completa el formulario del diagnóstico del quiz para ver cómo se capturan aquí de manera instantánea.
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-zinc-900 border-t border-zinc-850">
+                        {leadsList.map((lead, idx) => (
+                          <div key={idx} className="p-3 hover:bg-zinc-900/40 transition-colors">
+                            <div className="flex justify-between font-bold text-white">
+                              <span>{lead.name}</span>
+                              <span className="text-lime-450">{lead.score}% Score</span>
+                            </div>
+                            <div className="text-zinc-400 mt-0.5 max-w-full truncate">{lead.email}</div>
+                            {lead.phone && <div className="text-zinc-550 text-[9px]">WhatsApp: {lead.phone}</div>}
+                            <div className="text-[8px] text-zinc-600 mt-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                              {new Date(lead.timestamp).toLocaleString("es-ES")} • Q1: {lead.answersSummary[0]?.selectedOption?.substring(0, 30)}...
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right Side: Ultimate copy Apps Script instructions */}
+                <div className="md:col-span-6 space-y-3">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block font-bold">
+                    🛠️ Servidor Google Apps Script (Copiar y pegar)
+                  </span>
+                  
+                  <div className="p-3 bg-zinc-900/35 border border-zinc-850/55 rounded-none relative">
+                    <p className="text-[10px] text-zinc-350 leading-relaxed mb-2 font-mono">
+                      Copia esta función e instálala en <strong className="text-white">Extensiones &gt; Apps Script</strong> de tu Google Sheet. Luego presiona <strong className="text-white">Nueva Implementación &gt; Aplicación Web &gt; Acceso: Cualquiera</strong>.
+                    </p>
+                    <pre className="text-[8px] font-mono text-zinc-400 bg-zinc-950 p-2.5 max-h-[160px] overflow-y-auto rounded-none border border-zinc-900 select-all whitespace-pre leading-normal">
+{`function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = {};
+  
+  if (e && e.parameter && Object.keys(e.parameter).length > 0) {
+    data = e.parameter;
+  } else if (e && e.postData && e.postData.contents) {
+    try {
+      data = JSON.parse(e.postData.contents);
+    } catch(err) {}
+  }
+  
+  var timestamp = data.timestamp || data.fecha || data.Timestamp || new Date().toISOString();
+  var nombre = data.name || data.nombre || data.Nombre || "";
+  var correo = data.email || data.correo || data.Email || data.Correo || "";
+  var telefono = data.phone || data.telefono || data.celular || data.Telefono || "";
+  var score = data.score || data.puntaje || data.Puntaje || "0";
+  
+  var q1 = data.q1 || data.pregunta1 || data.Pregunta1 || "";
+  var q2 = data.q2 || data.pregunta2 || data.Pregunta2 || "";
+  var q3 = data.q3 || data.pregunta3 || data.Pregunta3 || "";
+  var q4 = data.q4 || data.pregunta4 || data.Pregunta4 || "";
+  
+  sheet.appendRow([timestamp, nombre, correo, telefono, score, q1, q2, q3, q4]);
+  
+  return ContentService.createTextOutput(JSON.stringify({
+    "status": "success",
+    "message": "Lead registrado"
+  })).setMimeType(ContentService.MimeType.JSON);
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
